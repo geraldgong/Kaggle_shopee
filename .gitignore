@@ -1,0 +1,7 @@
+data/
+.ipynb_checkpoints
+conda-env-shopee/
+.idea/
+__pycache__
+.git/
+.DS_Stores
