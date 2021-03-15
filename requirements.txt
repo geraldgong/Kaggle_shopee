@@ -1,8 +1,10 @@
-ipykernel==5.3.4
 kaggle==1.5.10
+line-profiler==3.1.0
 matplotlib==3.3.3
+memory-profiler==0.58.0
+notebook==6.2.0
 pandas==1.2.2
 pipdeptree==1.0.0
-scipy==1.4.1
+scikit-learn==0.24.1
 tensorflow==2.3.1
 yapf==0.30.0
