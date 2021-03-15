@@ -15,5 +15,13 @@ https://www.kaggle.com/c/shopee-product-matching
 2021-03-11
 
 - Construct f1-score evaluator
-- Clustering the distance with DBSCAN
+- Try clustering the distance with DBSCAN
 - Title embedding (NLP)
+
+2021-03-15
+
+- Opitmized memory usages
+
+2021-03-16
+
+- Implement with RAPIDS
