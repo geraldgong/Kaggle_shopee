@@ -24,4 +24,10 @@ https://www.kaggle.com/c/shopee-product-matching
 
 2021-03-16
 
-- Implement with RAPIDS
+- Try GPU and Implement with RAPIDS
+- Tensorflow Hub for text embedding
+  - Best score: 0.6986
+
+2021-03-17
+
+- Ensemble text embedding models with different languages
