@@ -38,14 +38,14 @@ https://www.kaggle.com/c/shopee-product-matching
   - Ken_text: 0.8
 
 - TfidfVectorizer 
-  - max_feature=10000, best score: 0.725
-  - max_feature=15000, best score: 0.735
+  - max_feature=10000, best score: 0.725 &#8594; LB: 0.678
+  - max_feature=15000, best score: 0.735 &#8594; LB: 0.690
   - max_feature=20000, best score: 0.732
   - max_feature=25000, best score: 0.728
 
 Colab Configurations:
 
-- [Install RAPIDS](https://rapids.ai/)
+- [Install RAPIDS on Colab](https://rapids.ai/)
 
 ```python
 !git clone https://github.com/rapidsai/rapidsai-csp-utils.git
@@ -73,6 +73,15 @@ files.upload()
 !mkdir data
 !unzip -q shopee-product-matching.zip -d ./data
 !rm shopee-product-matching.zip
+```
+
+Install RAPIDS in conda-env
+
+```bash
+conda activate conda-env
+
+conda install -c rapidsai-nightly -c nvidia -c numba -c conda-forge cudf python=3.8 cudatoolkit=11.0
+conda install -c rapidsai -c nvidia -c conda-forge -c defaults blazingsql=0.18 cuml=0.18 python=3.8 cudatoolkit=11.0
 ```
 
 
