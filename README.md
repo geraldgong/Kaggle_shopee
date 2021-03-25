@@ -43,7 +43,40 @@ https://www.kaggle.com/c/shopee-product-matching
   - max_feature=20000, best score: 0.732
   - max_feature=25000, best score: 0.728
 
-Colab Configurations:
+2021-03-22
+
+- Submit with EfficientNetB0 + KNN (image) and TfidVectorizer + cosine similarity (title)
+  - LB: 0.702
+- Check the possiblity of augmentation of the training image (left-right flip)
+
+2021-03-24
+
+- DBSCAN on 50 nearest distance of image embeddings
+  - LB: 0.720
+
+2021-03-25
+
+- Text preprocessing
+- Try Indonesian and English pre-trained model embedding
+- English --> 18939 samples, Indonesia -->8715 samples, Malay --> 2398 samples, German --> 854 samples
+
+
+
+## Colab Configurations:
+
+- Avoid disconnection due to idleness
+
+  Chrome: press **F12**, then run the following JavaScript snippet in the **console**
+
+  ```javascript
+  function KeepClicking(){
+  console.log("Clicking");45
+  document.querySelector("colab-connect-button").click()
+  }
+  setInterval(KeepClicking,60000)
+  ```
+
+  
 
 - [Install RAPIDS on Colab](https://rapids.ai/)
 
@@ -105,4 +138,17 @@ if gpus:
 print('We will restrict TensorFlow to max %iGB GPU RAM'%LIMIT)
 print('then RAPIDS can use %iGB GPU RAM'%(16-LIMIT))
 ```
+
+
+
+## Evaluation
+
+| Image Embedding                       | Text Embedding                                   | CV score | LB score |
+| ------------------------------------- | ------------------------------------------------ | -------- | -------- |
+| EfficientNetB0, NearestNeighbor: 0.65 | TifidfVectorizer: 25000, Cosine Similarity: 0.7  | 0.7273   | 0.702    |
+| EfficientNetB0, NearestNeighbor: 0.65 | TifidfVectorizer: 15000, Cosine Similarity: 0.7  | 0.7342   | 0.694    |
+| EfficientNetB0, NearestNeighbor: 0.65 | TifidfVectorizer: 25000, Cosine Similarity: 0.6  | 0.7377   | 0.688    |
+| EfficientNetB0, DBSCAN:  eps= 1       | TifidfVectorizer: 25000, Cosine Similarity: 0.7  | 0.7488   | 0.718    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | TifidfVectorizer: 25000, Cosine Similarity: 0.72 | 0.7498   | 0.720    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | TifidfVectorizer: 25000, DBSCAN: eps=0.13        | 0.7555   | 0.646    |
 
