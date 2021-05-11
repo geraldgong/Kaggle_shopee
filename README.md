@@ -1,4 +1,4 @@
-
+ 
 
 # Shopee - Price Match Guarantee 
 
@@ -10,7 +10,7 @@ https://www.kaggle.com/c/shopee-product-matching
 
 - Ref:
 
-   https://www.kaggle.com/cdeotte/rapids-cuml-tfidfvectorizer-and-knn/comments
+  https://www.kaggle.com/cdeotte/rapids-cuml-tfidfvectorizer-and-knn/comments
 
   https://www.kaggle.com/cdeotte/part-2-rapids-tfidfvectorizer-cv-0-700#Compute-Baseline-CV-Score
 
@@ -58,11 +58,42 @@ https://www.kaggle.com/c/shopee-product-matching
 
 - Text preprocessing
 - Try Indonesian and English pre-trained model embedding
+- [LaBSE](https://github.com/bojone/labse)
+- [XLM-Roberta](https://arxiv.org/abs/1901.07291)
 - English --> 18939 samples, Indonesia -->8715 samples, Malay --> 2398 samples, German --> 854 samples
 
+- Polyglot language detection
 
+2021-03-26
 
-## Colab Configurations:
+- re
+
+- Remove emoji code, contents in (xxx) and [xxx]
+- ? merge number with unit to a single character
+- ? remove individual number
+- ? Keep the dot between 
+
+2021-03-30
+
+- Start try with a NLP model with multi-lingual
+  - Only keep Noun in title
+  - remove all the numbers, units
+  - POS polyglot
+- Idea: According to similar text to gather corresponding images
+
+```python
+text_example = [
+ 'Vegetarian Kimchi korea sawi 1Kg vegie vegan vege'
+ 'Vegetarian Kimchi korea sawi 500 gram vegie vegan vege'
+ 'Fresh Kimchi sawi 500 gram dibuat oleh chef korea asli'
+ 'Kimchi original sawi 500 gram dibuat oleh chef korea asli enak'
+ 'kimchi fresh sawi 500 gram korea murah'
+]
+```
+
+2021-04-01
+
+- In order to clean the text, we applied stemming using the NLTK Snowball Stemmer, and removed stopwords/punctuation as well as transforming to lowercase.
 
 - Avoid disconnection due to idleness
 
@@ -76,9 +107,22 @@ https://www.kaggle.com/c/shopee-product-matching
   setInterval(KeepClicking,60000)
   ```
 
-  
 
-- [Install RAPIDS on Colab](https://rapids.ai/)
+2021-04-08
+
+- Finish preprocessing
+- Start to evaluate LABSE model try to integrate with [ArcFace](https://www.kaggle.com/ragnar123/unsupervised-baseline-arcface)
+- check if the minimum counts of the target,  >=2qw3edr2
+- check how much of the matches==1 belong to target==2 -> 63%
+
+2021-04-09
+
+- [ArcFace train image embedding model (EfficientNet B4)](https://www.kaggle.com/vatsalmavani/eff-b4-tfidf-0-727)
+- [Indonesian pretrained model fine-tune with ArcMargin](https://www.kaggle.com/moeinshariatnia/indonesian-distilbert-finetuning-with-arcmargin)
+
+
+
+[Install RAPIDS on Colab](https://rapids.ai/)
 
 ```python
 !git clone https://github.com/rapidsai/rapidsai-csp-utils.git
@@ -92,7 +136,9 @@ sys.path
 exec(open('rapidsai-csp-utils/colab/update_modules.py').read(), globals())
 ```
 
-- Kaggle Data Download
+
+
+Kaggle Data Download
 
 ```python
 !pip install -q kaggle
@@ -119,7 +165,7 @@ conda install -c rapidsai -c nvidia -c conda-forge -c defaults blazingsql=0.18 c
 
 
 
-- [Restrict Tensorflow usage](https://www.kaggle.com/ragnar123/unsupervised-baseline-arcface) 
+[Restrict Tensorflow usage](https://www.kaggle.com/ragnar123/unsupervised-baseline-arcface) 
 
 ```python
 # RESTRICT TENSORFLOW TO 2GB OF GPU RAM
@@ -143,12 +189,17 @@ print('then RAPIDS can use %iGB GPU RAM'%(16-LIMIT))
 
 ## Evaluation
 
-| Image Embedding                       | Text Embedding                                   | CV score | LB score |
-| ------------------------------------- | ------------------------------------------------ | -------- | -------- |
-| EfficientNetB0, NearestNeighbor: 0.65 | TifidfVectorizer: 25000, Cosine Similarity: 0.7  | 0.7273   | 0.702    |
-| EfficientNetB0, NearestNeighbor: 0.65 | TifidfVectorizer: 15000, Cosine Similarity: 0.7  | 0.7342   | 0.694    |
-| EfficientNetB0, NearestNeighbor: 0.65 | TifidfVectorizer: 25000, Cosine Similarity: 0.6  | 0.7377   | 0.688    |
-| EfficientNetB0, DBSCAN:  eps= 1       | TifidfVectorizer: 25000, Cosine Similarity: 0.7  | 0.7488   | 0.718    |
-| EfficientNetB0, DBSCAN:  eps= 1.2     | TifidfVectorizer: 25000, Cosine Similarity: 0.72 | 0.7498   | 0.720    |
-| EfficientNetB0, DBSCAN:  eps= 1.2     | TifidfVectorizer: 25000, DBSCAN: eps=0.13        | 0.7555   | 0.646    |
+| Image Embedding                       | Text Embedding                                               | CV score | LB score |
+| ------------------------------------- | ------------------------------------------------------------ | -------- | -------- |
+| EfficientNetB0, NearestNeighbor: 0.65 | Tifidf: 25000, Cosine Similarity: 0.7                        | 0.7273   | 0.702    |
+| EfficientNetB0, NearestNeighbor: 0.65 | Tifidf: 15000, Cosine Similarity: 0.7                        | 0.7342   | 0.694    |
+| EfficientNetB0, NearestNeighbor: 0.65 | Tifidf: 25000, Cosine Similarity: 0.6                        | 0.7377   | 0.688    |
+| EfficientNetB0, DBSCAN:  eps= 1       | Tifidf: 25000, Cosine Similarity: 0.7                        | 0.7488   | 0.718    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 25000, Cosine Similarity: 0.72                       | 0.7464   | 0.720    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 25000, Cosine + DBSCAN: eps=0.1                      | 0.7449   | 0.709    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 25000, Cosine + DBSCAN: eps=0.12                     | 0.7471   | 0.709    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 20000, Cosine Similarity: 0.72, preprocess           | 0.7496   | 0.719    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 25000, Cosine Similarity: 0.6, preprocess            | 0.7519   | 0.696    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 25000, Cosine Similarity: 0.72, preprocess, >=2 text matches if both image and text have only 1 match | 0.7641   | 0.727    |
+| EfficientNetB0, DBSCAN:  eps= 1.2     | Tifidf: 25000, Cosine Similarity: 0.72,  >=2 text matches if both image and text have only 1 match | 0.7658   | 0.730    |
 
